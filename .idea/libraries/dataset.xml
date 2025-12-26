@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="dataset">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/db/dataset/hanoi_gtfs_am.zip!/" />
+      <root url="jar://$PROJECT_DIR$/db/dataset/hanoi_gtfs_md.zip!/" />
+      <root url="jar://$PROJECT_DIR$/db/dataset/hanoi_gtfs_pm.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

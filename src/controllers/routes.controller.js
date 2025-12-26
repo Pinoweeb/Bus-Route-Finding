@@ -54,9 +54,58 @@ const getRouteStops = async (req, res) => {
   }
 };
 
+const findPath = async (req, res) => {
+  try {
+    const { mode, routeId, fromStopId, toStopId } = req.body;
+
+    if (!mode || !fromStopId || !toStopId) {
+      return res.status(400).json({
+        error: 'Missing required fields: mode, fromStopId, toStopId',
+      });
+    }
+
+    if (mode === 'simple') {
+      if (!routeId) {
+        return res.status(400).json({
+          error: 'routeId is required for simple mode',
+        });
+      }
+      
+      // ✅ Require lúc sử dụng (nó hoạt động!)
+      const routeFinding = require('../services/routeFinding.service');
+      const pathResult = await routeFinding.findSimplePathSameRoute(
+        routeId,
+        fromStopId,
+        toStopId
+      );
+      
+      return res.status(200).json(pathResult);
+    } else if (mode === 'optimal') {
+    const routeFinding = require('../services/routeFinding.service');
+    const pathResult = await routeFinding.findOptimalPath(
+      fromStopId,
+      toStopId
+  );
+
+  return res.status(200).json(pathResult);
+  }else {
+      return res.status(400).json({
+        error: 'Invalid mode. Use "simple" or "optimal"',
+      });
+    }
+  } catch (error) {
+    console.error('Error in findPath:', error);
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+  
+};
+
 module.exports = {
   getStatus,
   getRoutes,
   getRouteById,
   getRouteStops,
+  findPath,
 };

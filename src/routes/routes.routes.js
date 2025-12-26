@@ -7,5 +7,6 @@ router.get('/status', routesController.getStatus);
 router.get('/', routesController.getRoutes);
 router.get('/:id', routesController.getRouteById);
 router.get('/:id/stops', routesController.getRouteStops);
+router.post('/find-path', routesController.findPath);
 
 module.exports = router;
