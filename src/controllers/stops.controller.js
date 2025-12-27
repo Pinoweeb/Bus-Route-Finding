@@ -1,101 +1,113 @@
-const db = require('../config/db');
+const pool = require('../config/db');
 
-
-const sendResponse = (res, status, data, message = '') => {
-    res.status(status).json({
-        success: status >= 200 && status < 300,
-        message,
-        data
-    });
-};
-
-
-const getAllStops = async (req, res) => {
+// GET /stops?q=
+const getStops = async (req, res) => {
     try {
-        const { q, limit = 50, offset = 0 } = req.query;
+        const { q } = req.query;
 
-
-        let queryText = 'SELECT * FROM stops';
-        let queryParams = [];
-
-
-        if (q) {
-
-            queryText += ' WHERE stop_name ILIKE $1';
-            queryParams.push(`%${q}%`);
-        }
-
-
-        queryText += ` ORDER BY stop_name LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
-        queryParams.push(limit, offset);
-
-        const result = await db.query(queryText, queryParams);
-
-        sendResponse(res, 200, result.rows, 'Lấy danh sách điểm dừng thành công');
-    } catch (error) {
-        console.error('Error in getAllStops:', error);
-        sendResponse(res, 500, null, 'Lỗi Server khi lấy danh sách điểm dừng');
-    }
-};
-
-
-const getStopsNearby = async (req, res) => {
-    try {
-        const { lat, lng, radius = 1 } = req.query;
-
-        if (!lat || !lng) {
-            return sendResponse(res, 400, null, 'Vui lòng cung cấp tọa độ lat và lng');
-        }
-
-
-        const queryText = `
-      SELECT *,
-        (6371 * acos(
-          cos(radians($1)) * cos(radians(stop_lat)) *
-          cos(radians(stop_lon) - radians($2)) +
-          sin(radians($1)) * sin(radians(stop_lat))
-        )) AS distance
+        let query = `
+      SELECT stop_id, stop_name, stop_lat, stop_lon
       FROM stops
-      WHERE (6371 * acos(
-          cos(radians($1)) * cos(radians(stop_lat)) *
-          cos(radians(stop_lon) - radians($2)) +
-          sin(radians($1)) * sin(radians(stop_lat))
-        )) < $3
-      ORDER BY distance ASC
-      LIMIT 20;
     `;
+        const params = [];
 
-        const result = await db.query(queryText, [lat, lng, radius]);
+        if (q && q.trim() !== '') {
+            query += ' WHERE LOWER(stop_name) LIKE $1';
+            params.push(`%${q.toLowerCase()}%`);
+        }
 
-        sendResponse(res, 200, result.rows, `Tìm thấy ${result.rows.length} điểm dừng trong bán kính ${radius}km`);
-    } catch (error) {
-        console.error('Error in getStopsNearby:', error);
-        sendResponse(res, 500, null, 'Lỗi Server khi tìm điểm dừng gần nhất');
+        query += ' ORDER BY stop_name ASC';
+
+        const result = await pool.query(query, params);
+        return res.json(result.rows);
+    } catch (err) {
+        console.error('getStops error:', err);
+        return res.status(500).json({ error: 'Server error' });
     }
 };
 
-
+// GET /stops/:id
 const getStopById = async (req, res) => {
     try {
         const { id } = req.params;
 
-
-        const queryText = 'SELECT * FROM stops WHERE stop_id = $1';
-        const result = await db.query(queryText, [id]);
+        const result = await pool.query(
+            `
+      SELECT stop_id, stop_name, stop_lat, stop_lon
+      FROM stops
+      WHERE stop_id = $1
+      `,
+            [id]
+        );
 
         if (result.rows.length === 0) {
-            return sendResponse(res, 404, null, 'Không tìm thấy điểm dừng với ID này');
+            return res.status(404).json({ error: 'Stop not found' });
         }
 
-        sendResponse(res, 200, result.rows[0], 'Lấy thông tin điểm dừng thành công');
-    } catch (error) {
-        console.error('Error in getStopById:', error);
-        sendResponse(res, 500, null, 'Lỗi Server khi lấy chi tiết điểm dừng');
+        return res.json(result.rows[0]);
+    } catch (err) {
+        console.error('getStopById error:', err);
+        return res.status(500).json({ error: 'Server error' });
+    }
+};
+
+// GET /stops/nearby?lat=&lng=&radius=
+const getNearbyStops = async (req, res) => {
+    try {
+        const { lat, lng, radius } = req.query;
+
+        if (!lat || !lng) {
+            return res.status(400).json({ error: 'lat and lng are required' });
+        }
+
+        const radiusKm = radius ? Number(radius) : 0.5; // default 0.5 km
+
+        const query = `
+      SELECT
+        stop_id,
+        stop_name,
+        stop_lat,
+        stop_lon,
+        (
+          6371 * acos(
+            cos(radians($1)) * cos(radians(stop_lat)) *
+            cos(radians(stop_lon) - radians($2)) +
+            sin(radians($1)) * sin(radians(stop_lat))
+          )
+        ) AS distance_km
+      FROM stops
+      WHERE stop_lat IS NOT NULL
+        AND stop_lon IS NOT NULL
+      HAVING (
+        6371 * acos(
+          cos(radians($1)) * cos(radians(stop_lat)) *
+          cos(radians(stop_lon) - radians($2)) +
+          sin(radians($1)) * sin(radians(stop_lat))
+        )
+      ) <= $3
+      ORDER BY distance_km ASC
+      LIMIT 50;
+    `;
+
+        const result = await pool.query(query, [lat, lng, radiusKm]);
+
+        const data = result.rows.map((row) => ({
+            stop_id: row.stop_id,
+            stop_name: row.stop_name,
+            stop_lat: row.stop_lat,
+            stop_lon: row.stop_lon,
+            distance_m: Math.round(row.distance_km * 1000),
+        }));
+
+        return res.json(data);
+    } catch (err) {
+        console.error('getNearbyStops error:', err);
+        return res.status(500).json({ error: 'Server error' });
     }
 };
 
 module.exports = {
-    getAllStops,
+    getStops,
     getStopById,
-    getStopsNearby
+    getNearbyStops,
 };
