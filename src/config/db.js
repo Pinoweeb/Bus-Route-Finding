@@ -6,16 +6,17 @@ const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT) || 5432,
 });
 
+// Kiểm tra kết nối ngay khi khởi động
 pool
   .query('SELECT 1')
   .then(() => {
     console.log('DB connected');
   })
   .catch((err) => {
-    console.error('DB connection error', err);
+    console.error('DB connection error:', err.message);
   });
 
 module.exports = pool;
