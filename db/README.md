@@ -1,82 +1,15 @@
-# BUS_PROJECT - Backend 1
-
-Backend API cho hệ thống quản lý lộ trình xe buýt Hà Nội.
-
-## Cấu trúc project
-
-```
-BUS_PROJECT/
-├── db/
-│   ├── schema/
-│   │   └── bus.sql              # Schema chính của database
-│   ├── migrations/              # Các thay đổi DB sau này
-│   ├── scripts/
-│   │   └── reset_db.sql         # Script reset database
-│   ├── seed/                    # Dữ liệu mẫu (nếu có)
-│   └── backup/
-│       └── bus_routes_db_backup.sql  # Backup dữ liệu
-├── src/
-├── .gitignore
-├── pom.xml
-└── README.md
-```
-
 ## Hướng dẫn tạo Database
 
 ### 1. Yêu cầu
-- MySQL 5.7+ hoặc MariaDB
-- MySQL Workbench hoặc dòng lệnh MySQL
-
+- PostgreSQL
 ### 2. Tạo database từ schema
-
-**Cách A: Dùng MySQL Workbench**
-- Mở MySQL Workbench
-- Chọn `File` → `Open SQL Script`
-- Chọn file `db/schema/bus.sql`
-- Nhấn `Execute` (hoặc `Ctrl + Shift + Enter`)
-- Database `bus_routes_db` sẽ được tạo tự động
-
-**Cách B: Dùng dòng lệnh**
-```bash
-# Tạo database mới
-mysql -u root -p < db/schema/bus.sql
-
-# Kiểm tra xem đã tạo thành công chưa
-mysql -u root -p -e "USE bus_routes_db; SELECT COUNT(*) FROM routes;"
-```
-
-### 3. Xác nhận dữ liệu
-
-Sau khi tạo xong, chạy những truy vấn sau để kiểm tra:
-
-```sql
-USE bus_routes_db;
-
--- Kiểm tra số lượng records
-SELECT COUNT(*) as total_routes FROM routes;
-SELECT COUNT(*) as total_stops FROM stops;
-SELECT COUNT(*) as total_trips FROM trips;
-SELECT COUNT(*) as total_stop_times FROM stop_times;
-
--- Kiểm tra phân bố AM/MD/PM
-SELECT 
-  CASE 
-    WHEN trip_id LIKE '%_AM_%' THEN 'AM'
-    WHEN trip_id LIKE '%_MD_%' THEN 'MD'
-    WHEN trip_id LIKE '%_PM_%' THEN 'PM'
-    ELSE 'OTHER'
-  END as time_of_day,
-  COUNT(*) as trip_count
-FROM trips
-GROUP BY time_of_day
-ORDER BY time_of_day;
-```
-
-### 4. Reset database (nếu cần)
-
-```bash
-mysql -u root -p < db/scripts/reset_db.sql
-```
+- Mở pgAdmin4
+- Chuột phải vào 'Database'
+- Chọn 'Create', 'Database'
+- Đặt tên là 'bus_route_db'
+- Lần lượt chạy 'bus.sql', 'setup-route-stops.sql'
+- Import lần lượt dataset theo thứ tự 'routes', 'stops', 'trips', 'stop_times'(Format: csv; Encoding: UTF8, Bật 'header')
+- Chạy 'chuanhoa_data.sql'
 
 ## Database Schema
 
