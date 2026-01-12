@@ -29,15 +29,3 @@
 - Tổng số tuyến: Xem từ file `db/schema/bus.sql`
 - Tổng số điểm dừng: Xem từ file `db/schema/bus.sql`
 
-## Tiếp tục phát triển
-
-### Bước tới:
-1. Viết API endpoints REST
-2. Tối ưu queries và thêm indexes
-3. Viết unit tests
-4. Deploy lên production
-
-## Liên hệ
-
-Dự án BUS_PROJECT - Backend 1
-Tháng 12, 2025
