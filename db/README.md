@@ -10,6 +10,7 @@
 - Lần lượt chạy 'bus.sql', 'setup-route-stops.sql'
 - Import lần lượt dataset theo thứ tự 'routes', 'stops', 'trips', 'stop_times'(Format: csv; Encoding: UTF8, Bật 'header')
 - Chạy 'chuanhoa_data.sql'
+- Chạy 'user.sql'
 
 ## Database Schema
 
