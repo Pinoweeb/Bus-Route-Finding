@@ -8,6 +8,7 @@
 - Chọn 'Create', 'Database'
 - Đặt tên là 'bus_route_db'
 - Lần lượt chạy 'bus.sql', 'setup-route-stops.sql'
+- Chọn 1 trong 3 dataset 'am', 'md', 'pm'
 - Import lần lượt dataset theo thứ tự 'routes', 'stops', 'trips', 'stop_times'(Format: csv; Encoding: UTF8, Bật 'header')
 - Chạy 'chuanhoa_data.sql'
 - Chạy 'user.sql'
