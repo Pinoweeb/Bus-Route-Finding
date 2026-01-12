@@ -26,6 +26,3 @@
 ## Dữ liệu
 
 - Nguồn: GTFS Hà Nội (3 khung giờ: AM, MD, PM)
-- Tổng số tuyến: Xem từ file `db/schema/bus.sql`
-- Tổng số điểm dừng: Xem từ file `db/schema/bus.sql`
-
