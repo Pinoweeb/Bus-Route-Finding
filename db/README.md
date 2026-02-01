@@ -418,6 +418,4 @@ JOIN gtfs.stop_times_merged stm
 JOIN gtfs.stops_merged s
   ON s.stop_id = stm.stop_id
 WHERE r.route_id = 'ROUTE_ID';
-text
 
-Bạn chỉ cần copy toàn bộ khối trên vào một file `README.md`.
