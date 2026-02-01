@@ -26,7 +26,7 @@ Không cần PostGIS hay pgRouting.
 CREATE SCHEMA IF NOT EXISTS gtfs;
 SET search_path TO gtfs;
 ### 3.2. Bảng GTFS chính
-sql
+```sql
 -- routes
 DROP TABLE IF EXISTS routes CASCADE;
 CREATE TABLE routes (
@@ -110,7 +110,7 @@ stop_times.txt
 Đường dẫn /path/... chỉnh theo từng máy. [file:1][file:2][file:3][file:4]
 
 ### 4.1. routes
-sql
+```sql
 CREATE TEMP TABLE tmp_routes (LIKE gtfs.routes);
 
 COPY tmp_routes (
@@ -150,7 +150,7 @@ SELECT
 FROM tmp_routes
 ON CONFLICT (route_id) DO NOTHING;
 ### 4.2. stops
-sql
+```sql
 CREATE TEMP TABLE tmp_stops (LIKE gtfs.stops);
 
 COPY tmp_stops (
@@ -192,7 +192,7 @@ SELECT
 FROM tmp_stops
 ON CONFLICT (stop_id) DO NOTHING;
 ### 4.3. trips
-sql
+```sql
 CREATE TEMP TABLE tmp_trips (LIKE gtfs.trips);
 
 COPY tmp_trips (
@@ -226,7 +226,7 @@ SELECT
 FROM tmp_trips
 ON CONFLICT (trip_id) DO NOTHING;
 ### 4.4. stop_times
-sql
+```sql
 CREATE TEMP TABLE tmp_stop_times (LIKE gtfs.stop_times);
 
 COPY tmp_stop_times (
@@ -269,7 +269,7 @@ Nếu có nhiều dataset (AM, PM, v.v.), lặp lại các bước trên; khóa 
 
 ### 5. Hàm tiện ích
 ### 5.1. Haversine (m)
-sql
+```sql
 CREATE OR REPLACE FUNCTION gtfs.haversine_m(
     lat1 double precision, lon1 double precision,
     lat2 double precision, lon2 double precision
@@ -286,7 +286,7 @@ AS $$
     );
 $$;
 ### 5.2. time_to_seconds (tuỳ backend dùng)
-sql
+```sql
 CREATE OR REPLACE FUNCTION gtfs.time_to_seconds(t char(8))
 RETURNS integer
 LANGUAGE sql
@@ -298,7 +298,7 @@ AS $$
 $$;
 ### 6. Gộp bến & stop_times_merged
 ### 6.1. Map gộp bến (bán kính 20 m – có thể chỉnh)
-sql
+```sql
 DROP TABLE IF EXISTS gtfs.stop_merge_map;
 
 CREATE TABLE gtfs.stop_merge_map AS
@@ -327,7 +327,7 @@ WITH pairs AS (
 SELECT DISTINCT stop_id, merged_stop_id
 FROM pairs;
 ### 6.2. stops_merged
-sql
+```sql
 DROP TABLE IF EXISTS gtfs.stops_merged;
 
 CREATE TABLE gtfs.stops_merged AS
@@ -341,7 +341,7 @@ JOIN gtfs.stops s
   ON s.stop_id = m.stop_id
 GROUP BY m.merged_stop_id;
 ### 6.3. stop_times_merged
-sql
+```sql
 DROP TABLE IF EXISTS gtfs.stop_times_merged;
 
 CREATE TABLE gtfs.stop_times_merged AS
@@ -361,7 +361,7 @@ LEFT JOIN gtfs.stop_merge_map m
 ### 7. Bảng edges (đồ thị cho backend)
 Backend có thể dùng edges để tự triển khai Dijkstra/A* trong code hoặc bằng extension khác. [web:41][web:66]
 
-sql
+```sql
 DROP TABLE IF EXISTS gtfs.edges;
 
 CREATE TABLE gtfs.edges AS
@@ -380,7 +380,7 @@ JOIN gtfs.stop_times_merged st2
   ON st1.trip_id = st2.trip_id
  AND st2.stop_sequence = st1.stop_sequence + 1;
 ### 8. Index & view cho team khác
-sql
+```sql
 -- Index
 CREATE INDEX IF NOT EXISTS idx_trips_route_id          ON gtfs.trips(route_id);
 CREATE INDEX IF NOT EXISTS idx_stop_times_trip_id      ON gtfs.stop_times(trip_id);
@@ -397,18 +397,18 @@ FROM gtfs.stops_merged;
 9. Cách dùng mẫu cho backend/frontend
 Tìm bến theo tên:
 
-sql
+```sql
 SELECT stop_id, stop_name, stop_lat, stop_lon
 FROM gtfs.v_stops
 WHERE stop_name ILIKE '%giáp bát%';
 Lấy dữ liệu đồ thị để tính đường đi trong code:
 
-sql
+```sql
 SELECT from_stop, to_stop, travel_cost
 FROM gtfs.edges;
 Lấy danh sách bến trên một tuyến:
 
-sql
+```sql
 SELECT DISTINCT s.stop_id, s.stop_name
 FROM gtfs.routes r
 JOIN gtfs.trips t
