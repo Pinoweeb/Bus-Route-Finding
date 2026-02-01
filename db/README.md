@@ -24,7 +24,8 @@ Không cần PostGIS hay pgRouting.
 
 ```sql
 CREATE SCHEMA IF NOT EXISTS gtfs;
-SET search_path TO gtfs;'''
+SET search_path TO gtfs;
+
 ### 3.2. Bảng GTFS chính
 ```sql
 -- routes
