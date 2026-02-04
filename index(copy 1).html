@@ -23,48 +23,8 @@
             justify-content: center;
             align-items: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            position: relative; /* Để định vị nút ngôn ngữ */
         }
 
-        /* --- Style cho nút chuyển ngôn ngữ --- */
-        .lang-switch {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            border: none;
-            cursor: pointer;
-        }
-
-        .lang-btn.active {
-            background-color: #0066cc;
-            color: white;
-            cursor: default;
-        }
-
-        .lang-btn.inactive {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #333;
-        }
-
-        .lang-btn.inactive:hover {
-            background-color: #fff;
-            transform: translateY(-2px);
-        }
-
-        /* --- Style cũ --- */
         .container {
             width: 100%;
             max-width: 450px;
@@ -82,9 +42,11 @@
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
-            font-family: 'CottonCloud', cursive, sans-serif;
         }
 
+.header h1 {
+    font-family: 'CottonCloud', cursive;
+}
         .login-box {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
@@ -266,25 +228,16 @@
                 padding: 10px 16px;
                 font-size: 13px;
             }
-
-            .lang-switch {
-                top: 10px;
-                right: 10px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="lang-switch">
-        <button class="lang-btn active">Tiếng Việt</button>
-        <a href="indexeng.html" class="lang-btn inactive">Tiếng Anh</a>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1>Find Your Route</h1>
         </div>
 
+        <!-- Form Đăng nhập -->
         <div id="loginFormContainer" class="login-box">
             <h2>Đăng nhập</h2>
 
@@ -329,6 +282,7 @@
             </button>
         </div>
 
+        <!-- Form Đăng ký -->
         <div id="registerFormContainer" class="login-box hidden">
             <h2>Đăng ký</h2>
 

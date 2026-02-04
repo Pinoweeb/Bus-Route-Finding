@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tìm Xe Buýt Của Bạn</title>
+  <title>Find Your Route</title>
   <link rel="icon" href="icon.png" type="image/png">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* --- RESET & LAYOUT CHUNG --- */
+    /* --- RESET & GENERAL LAYOUT --- */
     * { box-sizing: border-box; }
     body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
 
@@ -18,17 +18,17 @@
       display: flex;
       height: 100vh;
       width: 100vw;
-      position: relative; /* Để định vị nút ngôn ngữ */
+      position: relative; /* For absolute positioning of lang switch */
     }
 
-    /* --- NÚT CHUYỂN ĐỔI NGÔN NGỮ --- */
+    /* --- LANGUAGE SWITCHER --- */
     .lang-switch {
         position: absolute;
         top: 20px;
         right: 20px;
         display: flex;
         gap: 10px;
-        z-index: 2000; /* Cao hơn bản đồ để nổi lên trên */
+        z-index: 2000; /* Higher than map controls */
     }
 
     .lang-btn {
@@ -44,7 +44,7 @@
     }
 
     .lang-btn.active {
-        background-color: #0066cc; /* Màu xanh nổi bật */
+        background-color: #0066cc;
         color: white;
         cursor: default;
     }
@@ -59,17 +59,17 @@
         transform: translateY(-2px);
     }
 
-    /* --- SIDEBAR (Bên trái) --- */
+    /* --- SIDEBAR (Left) --- */
     .sidebar {
       width: 380px;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
-      color: #333; /* Chữ màu đậm */
+      background-color: #ffffff;
+      color: #333;
       display: flex;
       flex-direction: column;
-      border-right: 1px solid #e0e0e0; /* Viền xám nhạt */
+      border-right: 1px solid #e0e0e0;
       flex-shrink: 0;
       z-index: 1000;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.05); /* Thêm bóng đổ nhẹ cho tách biệt */
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
     }
 
     /* HEADER */
@@ -85,18 +85,18 @@
     .tab { padding-bottom: 5px; opacity: 0.8; }
     .tab.active { opacity: 1; border-bottom: 2px solid white; }
 
-    /* --- THANH TÌM KIẾM --- */
+    /* --- SEARCH BAR --- */
     .search-box-container {
       padding: 15px;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
+      background-color: #ffffff;
       border-bottom: 1px solid #f0f0f0;
     }
     .search-input {
       width: 100%;
       padding: 10px;
-      border-radius: 20px; /* Bo tròn kiểu hiện đại */
+      border-radius: 20px;
       border: 1px solid transparent;
-      background-color: #f0f2f5; /* ĐÃ ĐỔI: Nền ô input xám nhạt cho nổi trên nền trắng */
+      background-color: #f0f2f5;
       color: #333;
       outline: none;
       transition: all 0.3s;
@@ -107,7 +107,7 @@
       box-shadow: 0 0 0 2px rgba(93, 173, 226, 0.2);
     }
 
-    /* --- DANH SÁCH TUYẾN --- */
+    /* --- ROUTE LIST --- */
     .route-list {
       flex: 1;
       overflow-y: auto;
@@ -120,11 +120,11 @@
     .route-item {
       display: flex;
       padding: 15px;
-      border-bottom: 1px solid #f0f0f0; /* Viền rất nhạt */
+      border-bottom: 1px solid #f0f0f0;
       cursor: pointer;
       transition: background 0.2s;
     }
-    .route-item:hover { background-color: #f5f9ff; /* Hover màu xanh rất nhạt */ }
+    .route-item:hover { background-color: #f5f9ff; }
 
     .route-icon {
       font-size: 24px;
@@ -154,7 +154,7 @@
     .sidebar-footer {
       padding: 15px;
       border-top: 1px solid #e0e0e0;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
+      background-color: #ffffff;
       display: flex;
       gap: 10px;
     }
@@ -174,7 +174,7 @@
     .btn-find:disabled { background-color: #e0e0e0; color: #999; cursor: not-allowed; } 
     .btn-logout { background-color: #dc3545; color: white; }
 
-    /* --- MAP CONTAINER (Bên phải) --- */
+    /* --- MAP CONTAINER (Right) --- */
     .map-container {
       flex: 1;
       position: relative;
@@ -195,29 +195,29 @@
 
   <div id="app-container">
     <div class="lang-switch">
-        <button class="lang-btn active">Tiếng Việt</button>
-        <a href="homepageeng.html" class="lang-btn inactive">English</a>
+        <a href="homepage.html" class="lang-btn inactive">Tiếng Việt</a>
+        <button class="lang-btn active">English</button>
     </div>
 
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="brand"><i class="fa-solid fa-bus"></i>Tìm Xe Buýt Của Bạn</div>
+        <div class="brand"><i class="fa-solid fa-bus"></i>Find Your Bus</div>
         <div class="tabs">
-          <div class="tab active"><i class="fa-solid fa-magnifying-glass"></i> TRA CỨU</div>
-          <div class="tab"><i class="fa-solid fa-map-location-dot"></i> TÌM ĐƯỜNG</div>
+          <div class="tab active"><i class="fa-solid fa-magnifying-glass"></i> LOOKUP</div>
+          <div class="tab"><i class="fa-solid fa-map-location-dot"></i> DIRECTIONS</div>
         </div>
       </div>
 
       <div class="search-box-container">
-        <input type="text" id="route-search" class="search-input" placeholder="Tìm tuyến xe (VD: 01, 2A)...">
+        <input type="text" id="route-search" class="search-input" placeholder="Search routes (e.g., 01, 2A)...">
       </div>
 
       <ul class="route-list" id="route-list">
         </ul>
 
       <div class="sidebar-footer">
-        <button id="find-route-btn" class="btn btn-find" disabled>Tìm lộ trình (A-B)</button>
-        <button id="logout-btn" class="btn btn-logout">Đăng xuất</button>
+        <button id="find-route-btn" class="btn btn-find" disabled>Find Route (A-B)</button>
+        <button id="logout-btn" class="btn btn-logout">Logout</button>
       </div>
     </aside>
 
@@ -230,14 +230,14 @@
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <script>
-    // DỮ LIỆU MẪU
+    // SAMPLE DATA (Translated)
     const routesData = [
-      { id: '2A', type: 'metro', name: 'Tuyến số Metro 2A', desc: 'Cát Linh - Hà Đông', time: '05:00 - 23:00', price: '30,000 VNĐ' },
-      { id: '3', type: 'metro', name: 'Tuyến số Metro 3', desc: 'Nhổn - Ga Hà Nội', time: '05:00 - 23:00', price: '24,000 VNĐ' },
-      { id: '01', type: 'bus', name: 'Tuyến số 01', desc: 'Bến xe Gia Lâm - Bến xe Yên Nghĩa', time: '05:00 - 21:00', price: '7,000 VNĐ' },
-      { id: '02', type: 'bus', name: 'Tuyến số 02', desc: 'Bác Cổ - Bến xe Yên Nghĩa', time: '05:05 - 21:05', price: '7,000 VNĐ' },
-      { id: '04', type: 'bus', name: 'Tuyến số 04', desc: 'Long Biên - Bệnh viện Nội tiết TW', time: '05:00 - 21:00', price: '7,000 VNĐ' },
-      { id: '05', type: 'bus', name: 'Tuyến số 05', desc: 'Linh Đàm - Phú Diễn', time: '05:00 - 21:05', price: '7,000 VNĐ' }
+      { id: '2A', type: 'metro', name: 'Metro Line 2A', desc: 'Cat Linh - Ha Dong', time: '05:00 - 23:00', price: '30,000 VND' },
+      { id: '3', type: 'metro', name: 'Metro Line 3', desc: 'Nhon - Hanoi Station', time: '05:00 - 23:00', price: '24,000 VND' },
+      { id: '01', type: 'bus', name: 'Bus Route 01', desc: 'Gia Lam Station - Yen Nghia Station', time: '05:00 - 21:00', price: '7,000 VND' },
+      { id: '02', type: 'bus', name: 'Bus Route 02', desc: 'Bac Co - Yen Nghia Station', time: '05:05 - 21:05', price: '7,000 VND' },
+      { id: '04', type: 'bus', name: 'Bus Route 04', desc: 'Long Bien - Nat. Endo. Hospital', time: '05:00 - 21:00', price: '7,000 VND' },
+      { id: '05', type: 'bus', name: 'Bus Route 05', desc: 'Linh Dam - Phu Dien', time: '05:00 - 21:05', price: '7,000 VND' }
     ];
 
     const routeListEl = document.getElementById('route-list');
@@ -259,7 +259,7 @@
             <div class="route-meta"><span><i class="fa-regular fa-clock"></i> ${route.time}</span><span>${route.price}</span></div>
           </div>
         `;
-        li.addEventListener('click', () => alert(`Bạn chọn: ${route.name}`));
+        li.addEventListener('click', () => alert(`You selected: ${route.name}`));
         routeListEl.appendChild(li);
       });
     }
@@ -275,7 +275,7 @@
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
 
-    L.Control.geocoder({ defaultMarkGeocode: false, placeholder: 'Tìm địa điểm...', position: 'topleft' })
+    L.Control.geocoder({ defaultMarkGeocode: false, placeholder: 'Search location...', position: 'topleft' })
       .on('markgeocode', function (e) {
         const latlng = e.geocode.center;
         map.setView(latlng, 15);
@@ -286,18 +286,18 @@
 
     function handleMapClick(e) {
         let latlng = e.latlng;
-        let name = e.name || 'Vị trí chọn';
+        let name = e.name || 'Selected Location';
         if (!markerA) {
-            markerA = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>Điểm đi (A)</b><br>${name}`).openPopup();
+            markerA = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>Start Point (A)</b><br>${name}`).openPopup();
         } else if (!markerB) {
-            markerB = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>Điểm đến (B)</b><br>${name}`).openPopup();
+            markerB = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>End Point (B)</b><br>${name}`).openPopup();
             document.getElementById('find-route-btn').disabled = false;
         } else {
             map.removeLayer(markerA); map.removeLayer(markerB);
             if (busRouteLayer) { map.removeLayer(busRouteLayer); busRouteLayer = null; }
             markerA = null; markerB = null;
             document.getElementById('find-route-btn').disabled = true;
-            markerA = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>Điểm đi (A)</b><br>${name}`).openPopup();
+            markerA = L.marker(latlng, { draggable: true }).addTo(map).bindPopup(`<b>Start Point (A)</b><br>${name}`).openPopup();
         }
     }
     map.on('click', handleMapClick);
@@ -310,7 +310,8 @@
     });
 
     document.getElementById('logout-btn').addEventListener('click', () => {
-      window.location.href = 'index.html';
+      // Redirect to English login page if you have one, otherwise index.html
+      window.location.href = 'indexeng.html'; 
     });
 
   </script>
