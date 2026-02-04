@@ -23,7 +23,7 @@
             justify-content: center;
             align-items: center;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            position: relative; /* Để định vị nút ngôn ngữ */
+            position: relative;
         }
 
         /* --- Style cho nút chuyển ngôn ngữ --- */
@@ -37,6 +37,11 @@
         }
 
         .lang-btn {
+            /* Cập nhật flex để căn chỉnh icon và chữ */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Khoảng cách giữa cờ và chữ */
+            
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
@@ -46,6 +51,15 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             border: none;
             cursor: pointer;
+        }
+
+        /* Style cho icon cờ hình tròn */
+        .flag-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%; /* Bo tròn hoàn toàn */
+            object-fit: cover; /* Đảm bảo hình không bị méo */
+            border: 1px solid rgba(0,0,0,0.1); /* Viền mờ nhẹ cho cờ */
         }
 
         .lang-btn.active {
@@ -276,8 +290,14 @@
 </head>
 <body>
     <div class="lang-switch">
-        <button class="lang-btn active">Tiếng Việt</button>
-        <a href="indexeng.html" class="lang-btn inactive">Tiếng Anh</a>
+        <button class="lang-btn active">
+            <img src="https://flagcdn.com/w40/vn.png" alt="VN" class="flag-icon">
+            Tiếng Việt
+        </button>
+        <a href="indexeng.html" class="lang-btn inactive">
+            <img src="https://flagcdn.com/w40/us.png" alt="US" class="flag-icon">
+            Tiếng Anh
+        </a>
     </div>
 
     <div class="container">

@@ -21,7 +21,7 @@
       position: relative; /* Để định vị nút ngôn ngữ */
     }
 
-    /* --- NÚT CHUYỂN ĐỔI NGÔN NGỮ --- */
+    /* --- NÚT CHUYỂN ĐỔI NGÔN NGỮ (ĐÃ CẬP NHẬT) --- */
     .lang-switch {
         position: absolute;
         top: 20px;
@@ -32,6 +32,11 @@
     }
 
     .lang-btn {
+        /* Cập nhật Flexbox để căn chỉnh cờ và chữ */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
         padding: 8px 16px;
         border-radius: 20px;
         font-size: 14px;
@@ -41,6 +46,15 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         border: none;
         cursor: pointer;
+    }
+
+    /* Style cho icon cờ */
+    .flag-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%; /* Bo tròn */
+        object-fit: cover; /* Chống méo ảnh */
+        border: 1px solid rgba(0,0,0,0.1); /* Viền mờ */
     }
 
     .lang-btn.active {
@@ -62,14 +76,14 @@
     /* --- SIDEBAR (Bên trái) --- */
     .sidebar {
       width: 380px;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
-      color: #333; /* Chữ màu đậm */
+      background-color: #ffffff; 
+      color: #333; 
       display: flex;
       flex-direction: column;
-      border-right: 1px solid #e0e0e0; /* Viền xám nhạt */
+      border-right: 1px solid #e0e0e0; 
       flex-shrink: 0;
       z-index: 1000;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.05); /* Thêm bóng đổ nhẹ cho tách biệt */
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05); 
     }
 
     /* HEADER */
@@ -88,15 +102,15 @@
     /* --- THANH TÌM KIẾM --- */
     .search-box-container {
       padding: 15px;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
+      background-color: #ffffff; 
       border-bottom: 1px solid #f0f0f0;
     }
     .search-input {
       width: 100%;
       padding: 10px;
-      border-radius: 20px; /* Bo tròn kiểu hiện đại */
+      border-radius: 20px; 
       border: 1px solid transparent;
-      background-color: #f0f2f5; /* ĐÃ ĐỔI: Nền ô input xám nhạt cho nổi trên nền trắng */
+      background-color: #f0f2f5; 
       color: #333;
       outline: none;
       transition: all 0.3s;
@@ -120,11 +134,11 @@
     .route-item {
       display: flex;
       padding: 15px;
-      border-bottom: 1px solid #f0f0f0; /* Viền rất nhạt */
+      border-bottom: 1px solid #f0f0f0; 
       cursor: pointer;
       transition: background 0.2s;
     }
-    .route-item:hover { background-color: #f5f9ff; /* Hover màu xanh rất nhạt */ }
+    .route-item:hover { background-color: #f5f9ff; }
 
     .route-icon {
       font-size: 24px;
@@ -154,7 +168,7 @@
     .sidebar-footer {
       padding: 15px;
       border-top: 1px solid #e0e0e0;
-      background-color: #ffffff; /* ĐÃ ĐỔI: Màu trắng */
+      background-color: #ffffff; 
       display: flex;
       gap: 10px;
     }
@@ -195,8 +209,14 @@
 
   <div id="app-container">
     <div class="lang-switch">
-        <button class="lang-btn active">Tiếng Việt</button>
-        <a href="homepageeng.html" class="lang-btn inactive">English</a>
+        <button class="lang-btn active">
+            <img src="https://flagcdn.com/w40/vn.png" alt="VN" class="flag-icon">
+            Tiếng Việt
+        </button>
+        <a href="homepageeng.html" class="lang-btn inactive">
+            <img src="https://flagcdn.com/w40/us.png" alt="US" class="flag-icon">
+            English
+        </a>
     </div>
 
     <aside class="sidebar">

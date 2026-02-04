@@ -21,7 +21,7 @@
       position: relative; /* For absolute positioning of lang switch */
     }
 
-    /* --- LANGUAGE SWITCHER --- */
+    /* --- LANGUAGE SWITCHER (UPDATED) --- */
     .lang-switch {
         position: absolute;
         top: 20px;
@@ -32,6 +32,11 @@
     }
 
     .lang-btn {
+        /* Flexbox for flag alignment */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
         padding: 8px 16px;
         border-radius: 20px;
         font-size: 14px;
@@ -41,6 +46,15 @@
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         border: none;
         cursor: pointer;
+    }
+
+    /* Flag Icon Style */
+    .flag-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(0,0,0,0.1);
     }
 
     .lang-btn.active {
@@ -195,8 +209,14 @@
 
   <div id="app-container">
     <div class="lang-switch">
-        <a href="homepage.html" class="lang-btn inactive">Tiếng Việt</a>
-        <button class="lang-btn active">English</button>
+        <a href="homepage.html" class="lang-btn inactive">
+            <img src="https://flagcdn.com/w40/vn.png" alt="VN" class="flag-icon">
+            Tiếng Việt
+        </a>
+        <button class="lang-btn active">
+            <img src="https://flagcdn.com/w40/us.png" alt="US" class="flag-icon">
+            English
+        </button>
     </div>
 
     <aside class="sidebar">

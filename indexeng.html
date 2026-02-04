@@ -37,6 +37,11 @@
         }
 
         .lang-btn {
+            /* Updated for Flexbox alignment */
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between flag and text */
+
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
@@ -46,6 +51,15 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             border: none;
             cursor: pointer;
+        }
+
+        /* Flag Icon Style */
+        .flag-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%; /* Circle shape */
+            object-fit: cover; /* Prevent distortion */
+            border: 1px solid rgba(0,0,0,0.1); /* Subtle border */
         }
 
         .lang-btn.active {
@@ -276,8 +290,14 @@
 </head>
 <body>
     <div class="lang-switch">
-        <button class="lang-btn active">English</button>
-        <a href="index.html" class="lang-btn inactive">Vietnamese</a>
+        <button class="lang-btn active">
+            <img src="https://flagcdn.com/w40/us.png" alt="US" class="flag-icon">
+            English
+        </button>
+        <a href="index.html" class="lang-btn inactive">
+            <img src="https://flagcdn.com/w40/vn.png" alt="VN" class="flag-icon">
+            Vietnamese
+        </a>
     </div>
 
     <div class="container">
@@ -477,7 +497,7 @@
                 // Save logged in user
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
                 
-                // --- THAY ĐỔI Ở ĐÂY: Chuyển hướng sang homepageeng.html ---
+                // Redirect to homepageeng.html
                 window.location.href = 'homepageeng.html'; 
             } else {
                 loginError.textContent = 'Incorrect email or password';
@@ -529,7 +549,6 @@
                 isGoogle: true
             }));
 
-            // --- ĐẢM BẢO CHUYỂN HƯỚNG ---
             // Redirect to homepageeng.html
             window.location.href = 'homepageeng.html';
         }
